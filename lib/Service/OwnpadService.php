@@ -19,6 +19,20 @@ class OwnpadService {
         // Generate a random pad name
         $token = \OC::$server->getSecureRandom()->generate(16, \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
+        // Append filename suffix to the token which will be used as padID
+        $suffix_enabled = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_suffix_filename_enable', 'no');
+        if($suffix_enabled === 'yes') {
+            $suffix = $padname;
+            $padext = strrpos($suffix, '.') !== false ? substr($suffix, strrpos($suffix, '.')) : '';
+            if ($padext === '.pad' || $padext === '.calc') {
+                // Remove unnecessary file extensions
+                $suffix = substr($suffix, 0, -strlen($padext));
+            }
+            $suffix = preg_replace('/[?&#]/', '_', $suffix); // Remove invalid characters
+            $token .= "~" . $suffix;
+            $token = substr($token, 0, 50); // Limit final token to 50 characters
+        }
+
         $l10n = \OC::$server->getL10N('ownpad');
         $l10n_files = \OC::$server->getL10N('files');
 

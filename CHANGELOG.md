@@ -1,3 +1,6 @@
+Ownpad (0.6.17):
+* **Enhancement**: add an option to append filenames as padID suffixes.
+
 Ownpad (0.6.16):
 * **Fix**: Add Nextcloud 21 compatibility.
 

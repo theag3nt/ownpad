@@ -71,6 +71,12 @@ style('ownpad', 'settings');
             </p>
         </div>
 
+        <p>
+        <input type="checkbox" name="ownpad_suffix_filename_enable" id="ownpad_suffix_filename_enable" class="checkbox"
+                value="1" <?php if ($_['ownpad_suffix_filename_enable'] === 'yes') print_unescaped('checked="checked"'); ?> />
+        <label for="ownpad_suffix_filename_enable"><?php p($l->t('Enable filename suffix in padIDs'));?></label><br/>
+        </p>
+
         <div id="ownpad-saved-message">
             <span class="msg success"><?php p($l->t('Saved')); ?></span>
         </div>

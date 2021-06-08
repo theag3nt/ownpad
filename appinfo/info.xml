@@ -13,7 +13,7 @@
     This application requires to have access to an instance of
     Etherpad and/or Ethercalc to work properly.
   </description>
-  <version>0.6.16</version>
+  <version>0.6.17</version>
   <licence>agpl</licence>
   <author mail="olivier.tetard@miskin.fr">Olivier Tétard</author>
   <documentation>
@@ -30,6 +30,7 @@
     <post-migration>
       <step>OCA\Ownpad\Migration\MigrateSettings</step>
       <step>OCA\Ownpad\Migration\ConfigPublicEnable</step>
+      <step>OCA\Ownpad\Migration\ConfigSuffixFilenameEnable</step>
     </post-migration>
   </repair-steps>
   <settings>
