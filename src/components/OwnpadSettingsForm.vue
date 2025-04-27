@@ -34,11 +34,11 @@
 					</NcNoteCard>
 
 					<NcCheckboxRadioSwitch type="switch"
-						:checked.sync="settings.etherpadUseApi">
+						:checked.sync="settings.etherpadUseapi">
 						{{ t('ownpad', 'Use Etherpad API') }}
 					</NcCheckboxRadioSwitch>
 
-					<fieldset v-show="settings.etherpadUseApi" id="ownpad-settings-etherpad-api" class="ownpad__sub-section">
+					<fieldset v-show="settings.etherpadUseapi" id="ownpad-settings-etherpad-api" class="ownpad__sub-section">
 						<NcCheckboxRadioSwitch type="switch"
 							:checked.sync="settings.etherpadEnableOauth">
 							{{ t('ownpad', 'Enable OAuth2 authentication to communicate with Etherpad (introduced in Etherpad 2)') }}
@@ -46,7 +46,7 @@
 
 						<NcPasswordField v-if="!settings.etherpadEnableOauth"
 							:label="t('ownpad', 'Etherpad Apikey')"
-							:value.sync="settings.etherpadApiKey" />
+							:value.sync="settings.etherpadApikey" />
 
 						<NcNoteCard v-if="settings.etherpadEnableOauth" type="info">
 							{{ t('ownpad', 'In order to enable OAuth2 authentication in Etherpad, you need to configure a dedicated service account. Please refer to the Etherpad documentation to proceed.') }}

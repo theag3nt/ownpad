@@ -32,13 +32,18 @@ class AdminSettings implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm() {
+		/*
+		 * Parameters backed by application settings must use names which when
+		 * converted to snake case (and prepended the ownpad_ prefix) match the
+		 * corresponding setting name. Otherwise they cannot be set from the UI.
+		 */
 		$parameters = [
 			'etherpadEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_enable', false),
 			'etherpadHost' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
-			'etherpadUseApi' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_useapi', false),
+			'etherpadUseapi' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_useapi', false),
 			'etherpadPublicEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_public_enable', false),
 			'etherpadEnableOauth' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_enable_oauth', false),
-			'etherpadApiKey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
+			'etherpadApikey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
 			'etherpadClientId' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_id', ''),
 			'etherpadClientSecret' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_secret', ''),
 			'etherpadCookieDomain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
