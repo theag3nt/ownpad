@@ -37,7 +37,6 @@ class AdminSettings implements ISettings {
 			'etherpadHost' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_host', ''),
 			'etherpadUseApi' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_useapi', false),
 			'etherpadPublicEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_public_enable', ),
-			'etherpadVersion' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_public_enable', '1'),
 			'etherpadEnableOauth' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_enable_oauth', false),
 			'etherpadApiKey' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_apikey', ''),
 			'etherpadClientId' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_id', ''),
