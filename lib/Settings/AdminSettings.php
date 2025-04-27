@@ -43,10 +43,13 @@ class AdminSettings implements ISettings {
 			'etherpadClientId' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_id', ''),
 			'etherpadClientSecret' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_client_secret', ''),
 			'etherpadCookieDomain' => $this->config->getAppValue('ownpad', 'ownpad_etherpad_cookie_domain', ''),
+			'etherpadSuffixFilenameEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_suffix_filename_enable', false),
+			'etherpadSuffixFilenameNormalize' => $this->getHumanBooleanConfig('ownpad', 'ownpad_etherpad_suffix_filename_normalize', false),
 			'ethercalcEnable' => $this->getHumanBooleanConfig('ownpad', 'ownpad_ethercalc_enable', false),
 			'ethercalcHost' => $this->config->getAppValue('ownpad', 'ownpad_ethercalc_host', ''),
 			'mimetypeEpConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.pad") === 'application/x-ownpad',
 			'mimetypeEcConfigured' => \OC::$server->getMimeTypeDetector()->detectPath("test.calc") === 'application/x-ownpad-calc',
+			'extIntlAvailable' => extension_loaded('intl'),
 		];
 		$this->initialState->provideInitialState('settings', $parameters);
 

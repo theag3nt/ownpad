@@ -60,10 +60,11 @@ class OwnpadService {
 
 		$l10n = \OC::$server->getL10N('ownpad');
 		$l10n_files = \OC::$server->getL10N('files');
+		$config = \OC::$server->getConfig();
 
 		if($type === "ethercalc") {
 			$ext = "calc";
-			$host = \OC::$server->getConfig()->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
+			$host = $config->getAppValue('ownpad', 'ownpad_ethercalc_host', false);
 
 			/*
 			 * Prepend the calc’s name with a `=` to enable multisheet
@@ -77,7 +78,69 @@ class OwnpadService {
 		} elseif($type === "etherpad") {
 			$padID = $token;
 
-			$config = \OC::$server->getConfig();
+			$logger = \OC::$server->getLogger(); // DEBUG
+
+			// Append filename suffix to the token which will be used as padID
+			$suffixEnabled = $config->getAppValue('ownpad', 'ownpad_etherpad_suffix_filename_enable', 'no');
+			if ($suffixEnabled === 'yes') {
+				$suffix = $padname;
+				$logger->info('original padname', array('suffix' => $suffix)); // DEBUG
+
+				// Remove unnecessary file extensions
+				$padExt = strrpos($suffix, '.') !== false ? substr($suffix, strrpos($suffix, '.')) : '';
+				if ($padExt === '.pad' || $padExt === '.calc') {
+					$suffix = substr($suffix, 0, -strlen($padExt));
+				}
+				$logger->info('removed extension', array('suffix' => $suffix)); // DEBUG
+
+				$suffixNormalize = $config->getAppValue('ownpad', 'ownpad_etherpad_suffix_filename_normalize', 'no');
+				if ($suffixNormalize === 'yes') {
+					// Attempt to transcribe file name to ASCII
+					// The intl extension is not guaranteed to be available, so skip transcription if it is missing
+					if (extension_loaded('intl')) {
+						$asciiSuffix = transliterator_transliterate('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC', $suffix);
+						// $asciiSuffix = transliterator_transliterate('Any-Latin; NFD; [:Nonspacing Mark:] Remove; NFC; [:Punctuation:] Remove', $suffix);
+						if ($asciiSuffix !== false) {
+							$suffix = $asciiSuffix;
+						}
+						$logger->info('intl normalized', array('suffix' => $suffix)); // DEBUG
+					}
+					if (extension_loaded('iconv')) { // DEBUG
+						$asciiSuffix = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $suffix);
+						// if ($asciiSuffix !== false) {
+						// 	$suffix = $asciiSuffix;
+						// }
+						$logger->info('iconv normalized', array('suffix' => $suffix));
+					}
+					if (extension_loaded('mbstring')) { // DEBUG
+						$asciiSuffix = mb_convert_encoding($suffix, 'ASCII', 'UTF-8');
+						// if ($asciiSuffix !== false) {
+						// 	$suffix = $asciiSuffix;
+						// }
+						$logger->info('mbstring normalized', array('suffix' => $suffix));
+					}
+				}
+
+				// Remove some invalid characters
+				$suffix = preg_replace('/[?&#]/', '_', $suffix);
+				$logger->info('removed invalid characters', array('suffix' => $suffix)); // DEBUG
+
+				// Try to use as much of the filename as possible while still keeping some random bytes
+				// This is using mbstring, which is a requirement of NextCloud as well. See:
+				//    https://docs.nextcloud.com/server/latest/admin_manual/installation/php_configuration.html
+				$maxLength = 50;
+				$minRandom = min(16, strlen($token));
+				$maxSuffix = $maxLength - $minRandom - 1;
+				$suffixLength = min($maxSuffix, mb_strlen($suffix));
+				$randomLength = $maxLength - $suffixLength - 1;
+				$token = substr($token, 0, $randomLength);
+				$suffix = mb_substr($suffix, 0, $suffixLength);
+
+				$logger->info('truncated', array('suffix' => $suffix, 'token' => $token, 'suffixLength' => $suffixLength, 'randomLength' => $randomLength)); // DEBUG
+
+				$token .= "~" . $suffix;
+			}
+
 			if($config->getAppValue('ownpad', 'ownpad_etherpad_enable', 'no') !== 'no' and $config->getAppValue('ownpad', 'ownpad_etherpad_useapi', 'no') !== 'no') {
 				try {
 					if($protected === true) {
