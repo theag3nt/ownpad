@@ -25,6 +25,7 @@ This application requires to have access to an instance of <a href="https://ethe
       <step>OCA\Ownpad\Migration\MigrateSettings</step>
       <step>OCA\Ownpad\Migration\ConfigPublicEnable</step>
       <step>OCA\Ownpad\Migration\RegisterMimeType</step>
+      <step>OCA\Ownpad\Migration\ConfigSuffixFilename</step>
     </post-migration>
     <uninstall>
       <step>OCA\Ownpad\Migration\UnregisterMimeType</step>

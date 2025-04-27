@@ -79,6 +79,23 @@
 							{{ t('ownpad', 'Allow “public” pads') }}
 						</NcCheckboxRadioSwitch>
 
+						<NcCheckboxRadioSwitch type="switch"
+							:checked.sync="settings.etherpadSuffixFilenameEnable">
+							{{ t('ownpad', 'Use filename as pad ID suffix') }}
+						</NcCheckboxRadioSwitch>
+
+						<fieldset v-show="settings.etherpadSuffixFilenameEnable" id="ownpad-settings-etherpad-suffix" class="ownpad__sub-section">
+							<NcNoteCard type="info">
+								{{ t('ownpad', 'Normalization requires the `intl` PHP extension for optimal results. If it is not available then the normalization step is skipped.') }}
+							</NcNoteCard>
+
+							<NcCheckboxRadioSwitch type="switch"
+								:checked.sync="settings.etherpadSuffixFilenameNormalize"
+								:disabled="!settings.extIntlAvailable">
+								{{ t('ownpad', 'Normalize filenames to ASCII') }}
+							</NcCheckboxRadioSwitch>
+						</fieldset>
+
 						<NcNoteCard type="info">
 							{{ t('ownpad', 'For example, if you host your Etherpad instance on `pad.example.org` and your Nextcloud instance on `cloud.example.org` you need to configure your cookie to `example.org` domain.') }}
 						</NcNoteCard>
